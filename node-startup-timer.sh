@@ -18,14 +18,7 @@ datediff() {
     printf "%d\n" "$(( d1 - d2 ))"
 }
 
-cleanup() {
-    pinfo "Cleaning up created Kubernetes API resources"
-    tk delete --auto-approve always --tla-code replicas="0" "$TK_ENV"
-    pinfo "Done"
-}
 
-
-trap cleanup INT EXIT
 pinfo "Raw measurements will be written to" "$OUT"
 pinfo "Creating support API resources in the Kubernetes cluster context=" "$CTX"
 tk apply --tla-code replicas="0" "$TK_ENV"
