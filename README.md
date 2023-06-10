@@ -17,12 +17,15 @@ preemptible Pods (commonly overprovisioning/balloon Pods, ML/worker workloads).
 
 # What's being measured exactly
 
-The tool measures time between the testing Pod gets created in Kubernetes API to
-a time it transitions to the "Running" state on a Node i.e. the Node is
-"functionally ready".
+The tool measures two metrics:
+- The time between the testing Pod gets created in Kubernetes API to a time it
+  transitions to the "Running" state on a Node i.e. the Node is "functionally
+  ready".
+- The time between the testing Pod gets created in Kubernetes API to a time it
+  it gets scheduled to a Pod.
 
-Statistics measured are currently `p50`, `p80`, `p99`, `min`, `max` and `stddev`
-but it should be easy enough to add any that interest you.
+The statistics measured are currently `p50`, `p80`, `p99`, `min`, `max` and
+`stddev` but it should be easy enough to add any that interest you.
 
 The resulting statistics are computed over configurable number of rounds.
 
@@ -68,7 +71,11 @@ $ make clean
 
 - The startup time of the test Pods should be minimal, but the delay of the
   image pull might be considerable. Consider mirroring the image into your
-  private registry and using that instead.
+  private registry and using that instead. We do provide the time-to-schedule
+  metric, but that leaves out an important part of the process.
+
+  The time-to-schedule is intended as more of a control metric for cases where
+  an image pull wildly differs between tested clusters or test runs.
 - Curiously enough, it seems that Node startup time varies by AWS region. We
   recommend to test each region that you have a workload in.
 - Different clusters will have different startup times. Things like cloudinit,
