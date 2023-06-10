@@ -6,8 +6,9 @@ readonly ROUNDS="${1:-10}"
 readonly NAME="node-startup-timer"
 readonly TK_ENV="kubernetes/environments/${NAME}"
 readonly CTX=$(jq -r '.spec.contextNames[0]' "${TK_ENV}/spec.json")
-readonly OUT_TTS=$(mktemp  -p /tmp tmp.node-startup.tts.timer.XXXXXXXXXX)
-readonly OUT_TTR=$(mktemp  -p /tmp tmp.node-startup.ttr.timer.XXXXXXXXXX)
+readonly OUT_DIR=$(mktemp -d -p /tmp node-startup-timer.XXXXXXXXXX)
+readonly OUT_TTS="${OUT_DIR}/time-to-schedule.csv"
+readonly OUT_TTR="${OUT_DIR}/time-to-run.csv"
 
 pinfo() {
   printf "[+] %s\n" "$*"
@@ -25,10 +26,9 @@ pstat() {
 }
 
 
-pinfo "Raw time-to-schedule measurements will be written to: " "$OUT_TTS"
-pinfo "Raw time-to-running measurements will be written to: " "$OUT_TTR"
+pinfo "Raw measurements will be written to \"$OUT_DIR/\""
 
-pinfo "Creating support API resources in the Kubernetes cluster context: " "$CTX"
+pinfo "Creating support API resources in the Kubernetes cluster context \"$CTX\""
 tk apply --tla-code replicas="0" "$TK_ENV"
 
 for i in $(seq "$ROUNDS"); do
