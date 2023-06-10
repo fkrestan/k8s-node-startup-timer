@@ -18,16 +18,17 @@ preemptible Pods (commonly overprovisioning/balloon Pods, ML/worker workloads).
 # What's being measured exactly
 
 The tool measures two metrics:
-- The time between the testing Pod gets created in Kubernetes API to a time it
+- The time between the testing Pod gets created in Kubernetes API to the time it
   transitions to the "Running" state on a Node i.e. the Node is "functionally
   ready".
-- The time between the testing Pod gets created in Kubernetes API to a time it
-  it gets scheduled to a Pod.
+- The time between the testing Pod gets created in Kubernetes API to the time it
+  transitions to the "Scheduled" state.
 
 The statistics measured are currently `p50`, `p80`, `p99`, `min`, `max` and
 `stddev` but it should be easy enough to add any that interest you.
 
-The resulting statistics are computed over configurable number of rounds.
+The resulting statistics are computed over configurable number of node
+additions.
 
 
 # The setup
