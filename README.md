@@ -41,7 +41,8 @@ This repository also uses [direnv][de] in combination with [nix shell][nix] to
 deliver all tooling needed to successfully use this repository.
 
 Yes, this is an overkill for something this simple. But it's the template that
-we've had on hand.
+we've had on hand. Also, it's super flexible to maintain modifications on top of
+the manifests.
 
 
 # Usage
@@ -66,8 +67,8 @@ $ make clean
 # Notes
 
 - The startup time of the test Pods should be minimal, but the delay of the
-  image pull might be considerable. Consider using mirroring the image into your
-  private registry used by the cluster.
+  image pull might be considerable. Consider mirroring the image into your
+  private registry and using that instead.
 - Curiously enough, it seems that Node startup time varies by AWS region. We
   recommend to test each region that you have a workload in.
 - Different clusters will have different startup times. Things like cloudinit,
@@ -75,6 +76,10 @@ $ make clean
 - The startup time you'll get is likely the typical one under normal cluster
   conditions. Expect wildly different numbers under high pressure conditions or
   conditions with multiple faults (e.g. AWS zone failure).
+- This tool currently tests only single node startup time. This shouldn't differ
+  wildly from somewhat slow cluster capacity growth, but extreme scale up might
+  run into other limits not covered by this tool (e.g. on AWS with AWS VPC CNI
+  it might run into AWS API rate limits in an extreme case).
 - Did you know that [JSON is valid YAML][jy]?
 
 
